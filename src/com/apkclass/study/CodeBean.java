@@ -13,9 +13,9 @@ public class CodeBean implements Serializable{
 	private int      			id;          //题目id
 	private String   			title;       //题目标题
 	private ArrayList<AnswerBean> 	answer_list; //题目答案集合
-	
-	
-	
+
+
+
 	public int getId() {
 		return id;
 	}
