@@ -1,22 +1,25 @@
 package com.apkclass.study;
 
+import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
+
+import com.apkclass.ui.R;
+import com.apkclass.ui.XmlParser;
+import com.apkclass.utils.log;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.GetDataCallback;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-
-import com.apkclass.ui.R;
-import com.apkclass.ui.XmlParser;
-import com.apkclass.utils.log;
-
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 
 public class CodeProvider {
 
@@ -37,7 +40,6 @@ public class CodeProvider {
 	 * @return 题目集合
 	 */
 	public ArrayList<CodeBean> getCodeListFromServer(int typenumber) {
-
 		log.e("getCodeListFromServer");
 		return null;
 	}
@@ -118,4 +120,24 @@ public class CodeProvider {
 		}
 		return null;
 	}
+
+    public boolean getCodeFromServer(String codeName, final GetDataCallback getDataCallback){
+        if( codeName == null ){
+            Log.e("CodeProvider", "codeName can't be null");
+            return false;
+        }
+
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+        query.whereEqualTo("codeName", codeName);
+        query.getFirstInBackground(new GetCallback<AVObject>() {
+            @Override
+            public void done(AVObject avObject, AVException e) {
+                if( e == null ) {
+                    AVFile xmlFile = avObject.getAVFile("codeFile");
+                    xmlFile.getDataInBackground(getDataCallback);
+                }
+            }
+        });
+        return true;
+    }
 }

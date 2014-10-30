@@ -1,21 +1,23 @@
 package com.apkclass.ui;
 
-import com.apkclass.ui.MyImageView.OnViewClickListener;
-import com.apkclass.ui.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.apkclass.study.CodeProvider;
+import com.apkclass.ui.MyImageView.OnViewClickListener;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.GetDataCallback;
 
 public class TestRolateAnimActivity extends Activity
 {
 	MyImageView joke;
 	MyImageView idea;
+    MyImageView avos;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -52,11 +54,116 @@ public class TestRolateAnimActivity extends Activity
 				TestRolateAnimActivity.this.startActivity(intent);
 			}
 		});
-		
-		
-		
-		
+
+        avos = (MyImageView) findViewById(R.id.c_recommend);
+        avos.setOnClickIntent(new OnViewClickListener() {
+            @Override
+            public void onViewClick(MyImageView view) {
+                Log.d("AVOS test", "start");
+//                AVObject avObject = new AVObject("TestObject");
+//                avObject.put("name","test in cim");
+//                avObject.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(AVException e) {
+//                        if( e == null ){
+//                            Log.d("Test","avObject saved");
+//                        } else {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+
+//                AVQuery<AVObject> query = new AVQuery<AVObject>("TestObject");
+//
+//                    query.getFirstInBackground(new GetCallback<AVObject>() {
+//                        @Override
+//                        public void done(AVObject avObject, AVException e) {
+//                            if ( e == null ) {
+//                                String name = avObject.getString("name");
+//                                Log.d("Test", name);
+//                            }
+//                        }
+//                    });
+
+//                AVQuery<AVObject> query2 = new AVQuery<AVObject>("Codes");
+//                query2.getFirstInBackground(new GetCallback<AVObject>() {
+//                    @Override
+//                    public void done(AVObject avObject, AVException e) {
+//                        if( e == null ){
+//                            if(avObject == null){
+//                                Log.d("Test","avObject is null");
+//                            } else {
+//                                Log.d("Test","avObject is not null");
+//                            }
+//                            Log.d("Test",avObject.getObjectId());
+//                            AVFile xmlFile = avObject.getAVFile("codeFile");
+//                            xmlFile.getDataInBackground(new GetDataCallback() {
+//                                @Override
+//                                public void done(byte[] bytes, AVException e) {
+//                                    if(e == null){
+//                                        Log.d("Test", "Got Data");
+//                                        Log.d("Test", new String(bytes));
+//                                    }
+//                                }
+//                            }, new ProgressCallback() {
+//                                @Override
+//                                public void done(Integer integer) {
+//                                    Log.d("Test", "Progress" + integer.toString());
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+
+//                AVFile avFile;
+//                try{
+//                    AVObject avObject = new AVObject("JobApplication");
+//                    avFile = new AVFile("JobApplication", "hello world".getBytes());
+//                    avFile.save();
+//                    avObject.put("applicatName","steve");
+//                    avObject.put("applicatFile", avFile);
+//                    avObject.saveInBackground();
+//                }catch(AVException  e){
+//                }
+//                AVQuery<AVObject> query = new AVQuery<AVObject>("JobApplication");
+//                query.getFirstInBackground(new GetCallback<AVObject>() {
+//                    @Override
+//                    public void done(AVObject avObject, AVException e) {
+//                        if(e == null ){
+//                            Log.d("Test", avObject.getObjectId());
+//                            AVFile file = avObject.getAVFile("applicatFile");
+//                            file.getDataInBackground(new GetDataCallback() {
+//                                @Override
+//                                public void done(byte[] bytes, AVException e) {
+//                                    Log.d("Test", "Data Got");
+//                                }
+//                            }, new ProgressCallback() {
+//                                @Override
+//                                public void done(Integer integer) {
+//                                    Log.d("Test", "Progress : " + integer);
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+
+                CodeProvider cp = new CodeProvider(TestRolateAnimActivity.this);
+                GetDataCallback getDataCallback = new GetDataCallback() {
+                    @Override
+                    public void done(byte[] bytes, AVException e) {
+                        if( e == null ){
+                            Log.d("Test",new String(bytes));
+                        }
+                    }
+                };
+                cp.getCodeFromServer("anodroid-base",getDataCallback);
+            }
+        });
+
+
+
+
 	}
-	
-	
+
+
 }
