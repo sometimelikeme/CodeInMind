@@ -40,7 +40,7 @@ public class XmlParser {
                             if(codeBean.getAnswer_list() == null){
                                 log.i("answerlist alloc failed!!!");
                             }
-						codeBean.setId(new Integer(parser.getAttributeValue(null, "id")));
+						codeBean.setId(parser.getAttributeValue(null, "id"));
 						log.e(" "+ codeBean.getId());
 					}else if(codeBean != null) {
 						if(name.equalsIgnoreCase("subject")) {
