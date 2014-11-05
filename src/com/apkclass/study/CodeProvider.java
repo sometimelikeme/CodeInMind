@@ -5,11 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import com.apkclass.ui.R;
 import com.apkclass.ui.XmlParser;
 import com.apkclass.utils.log;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.GetDataCallback;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -118,4 +126,36 @@ public class CodeProvider {
 		}
 		return null;
 	}
+
+
+    public void getCodeListFromServer(int pageCount, int pageSkip, final FindCallback findCallback){
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+
+        if(pageCount > 0) {
+            query.setLimit(pageCount);
+        }
+        if(pageSkip > 0) {
+            query.setSkip(pageCount * pageSkip);
+        }
+
+        query.findInBackground(findCallback);
+    }
+
+    public void getCodeFromServer(final String codeName, final GetDataCallback getDataCallback){
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+        query.whereEqualTo("codeName", codeName);
+        query.getFirstInBackground(new GetCallback<AVObject>() {
+            @Override
+            public void done(AVObject avObject, AVException e) {
+                if(e == null){
+                    AVFile code = avObject.getAVFile("codeFile");
+                    code.getDataInBackground(getDataCallback);
+                } else {
+                    Log.e("getCodeFromServer","can't get code : " + codeName);
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
 }
