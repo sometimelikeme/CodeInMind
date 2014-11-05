@@ -2,11 +2,13 @@ package com.apkclass.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.Log;
 import android.util.Xml;
 
 import com.apkclass.study.AnswerBean;
@@ -103,4 +105,48 @@ public class XmlParser {
 
 		return codeBeanList;
 	}
+
+
+    public void codeParse(Reader reader,ArrayList<AnswerBean> answerBeanList){
+        XmlPullParser xpp = Xml.newPullParser();
+        try {
+            xpp.setInput(reader);
+            int eventType = xpp.getEventType();
+            String name = null;
+            AnswerBean answerBean = new AnswerBean();
+            while(eventType != XmlPullParser.END_DOCUMENT){
+                if(eventType == XmlPullParser.START_DOCUMENT){
+                    Log.d("codeParse","START_DOCUMENT");
+                }else if(eventType == XmlPullParser.START_TAG){
+                    if(xpp.getName() == "subject") {
+                        name = "subject";
+                    }else if(xpp.getName() == "answer"){
+                        name = "answer";
+                    }
+                }else if(eventType == XmlPullParser.END_TAG){
+                    if(xpp.getName() == "node"){
+                        answerBeanList.add(answerBean);
+                        answerBean.clean();
+                    }
+                }else if(eventType == XmlPullParser.TEXT) {
+                    if(name == "subject"){
+                        answerBean.setSubject(xpp.getText());
+                        name = null;
+                    }else if(name == "answer"){
+                        answerBean.addAnswer(xpp.getText());
+                        name = null;
+                    }
+                }
+                xpp.next();
+            }
+            answerBeanList.add(answerBean);
+
+        }catch(XmlPullParserException xmlExc){
+            xmlExc.printStackTrace();
+        }catch(IOException ioExc){
+            ioExc.printStackTrace();
+        }
+    }
+
+
 }
