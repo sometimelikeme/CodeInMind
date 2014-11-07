@@ -6,18 +6,23 @@ import java.util.Map;
 import com.apkclass.adapter.DocsListAdapter;
 import com.apkclass.study.CodeBean;
 import com.apkclass.study.CodeProvider;
+import com.apkclass.study.LearnPage;
 import com.apkclass.utils.log;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class StartLearn extends Activity {
 	
-	ArrayList<CodeBean> codeBeanList = null;
+	
 	ListView ll_contentlist = null;
 	DocsListAdapter contentlistadapter = null;
 
@@ -35,17 +40,24 @@ public class StartLearn extends Activity {
 		contentlistadapter.setDatalist(titlelist);
 		ll_contentlist.setAdapter(contentlistadapter);
 		
+		ll_contentlist.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(StartLearn.this, LearnPage.class);
+				Bundle bundle = new Bundle();
+				log.e("position:"+ position);
+				bundle.putInt("number", position);
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
+		});
+		
 
 		
-		CodeProvider codeProvider = new CodeProvider(StartLearn.this);
-		codeBeanList = codeProvider.getCodeListFromFile(0);
-		if(codeBeanList != null){
-			for(int i=0; i<codeBeanList.size(); i++) {
-				log.e("codeBeanListitem:"+codeBeanList.get(i).toString());
-			}
-		} else {
-            log.e("codeBeanList is null");
-        }
+
 		
 		
 		

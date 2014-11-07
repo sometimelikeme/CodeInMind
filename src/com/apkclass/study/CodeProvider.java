@@ -68,7 +68,7 @@ public class CodeProvider {
 			if (!file.exists()) {
 				file.mkdir();
 				// 创建目录后从网站下载题库
-                log.i("xml file not exist");
+                log.e("xml file not exist");
 				getCodeListFromServer(typenumber);
 			} else {
 				String path_files = downLoadPath.getPath() + "/storage/"

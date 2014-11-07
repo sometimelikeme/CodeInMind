@@ -10,19 +10,16 @@ import java.util.ArrayList;
  */
 
 public class CodeBean implements Serializable{
-	private int      			id;          //题目id
+	private String      		id;          //题目id
 	private String   			title;       //题目标题
 	private ArrayList<AnswerBean> 	answer_list; //题目答案集合
-
-
-
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
 
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

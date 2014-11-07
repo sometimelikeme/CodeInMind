@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+        android:id="@+id/toptitle"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="#f3f1f4" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dip"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:text="题目列表"
+            android:textColor="@color/black"
+            android:textSize="20dip" />
+
+        <ImageView
+            android:id="@+id/sys_set_back"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+
+            android:paddingBottom="9dp"
+            android:paddingLeft="10dip"
+            android:paddingRight="15dp"
+            android:paddingTop="9dp"
+            android:src="@drawable/back" />
+    </RelativeLayout>
+    
+    
+
+    <ListView
+        android:id="@+id/lv_codelist"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="6dp"
+        android:background="@color/white"
+        android:divider="#ded9de"
+        android:dividerHeight="0.5dp"
+        android:fadingEdge="none"
+        android:focusableInTouchMode="true"
+        android:listSelector="#00000000" >
+    </ListView>
+
+</LinearLayout>
