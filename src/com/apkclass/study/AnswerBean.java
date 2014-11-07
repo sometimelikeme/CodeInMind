@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AnswerBean implements Serializable{
+public class AnswerBean{
 	
 	public Boolean  answer_flag;         //题目答案标记
 	public String   answer_content;      //题目答案内容
@@ -27,7 +27,7 @@ public class AnswerBean implements Serializable{
 		this.answer_content = answer_content;
 	}
 
-    public void AnswerBean(){
+    public AnswerBean(){
         this.answerList = new ArrayList<String>();
         this.subject = null;
     }
@@ -49,12 +49,11 @@ public class AnswerBean implements Serializable{
     }
 
     public void addAnswer(String answer){
-        Log.d("addAnswer", answer);
         this.answerList.add(answer);
     }
 
     public void clean(){
         this.subject = null;
-        this.answerList = null;
+        this.answerList = new ArrayList<String>();
     }
 }

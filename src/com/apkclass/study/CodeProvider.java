@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.apkclass.ui.R;
 import com.apkclass.ui.XmlParser;
@@ -128,7 +129,7 @@ public class CodeProvider {
 	}
 
 
-    public void getCodeListFromServer(int pageCount, int pageSkip, final FindCallback findCallback){
+    public void getCodeListFromServerInBackgroud(int pageCount, int pageSkip, final FindCallback findCallback){
         AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
 
         if(pageCount > 0) {
@@ -141,7 +142,32 @@ public class CodeProvider {
         query.findInBackground(findCallback);
     }
 
-    public void getCodeFromServer(final String codeName, final GetDataCallback getDataCallback){
+    public ArrayList<String> getCodeListFromServer(int pageCount, int pageSkip){
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+
+        if(pageCount > 0) {
+            query.setLimit(pageCount);
+        }
+        if(pageSkip > 0) {
+            query.setSkip(pageCount * pageSkip);
+        }
+
+        try{
+            ArrayList<String> codeList = new ArrayList<String>();
+            List<AVObject> avObjectList = query.find();
+            for(int i; i<avObjectList.size(); i++){
+                codeList.add(avObjectList.get(i).getString("codeName"));
+            }
+
+            return codeList;
+
+        }catch (AVException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getCodeFromServerInBackground(final String codeName, final GetDataCallback getDataCallback){
         AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
         query.whereEqualTo("codeName", codeName);
         query.getFirstInBackground(new GetCallback<AVObject>() {
@@ -157,5 +183,17 @@ public class CodeProvider {
             }
         });
 
+    }
+
+    public byte[] getCodeFromServer(String codeName){
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+        query.whereEqualTo("codeName", codeName);
+        try {
+            AVObject avObject = query.getFirst();
+            AVFile codeFile = avObject.getAVFile("codeFile");
+            return codeFile.getData();
+        }catch(AVException e){
+            e.printStackTrace();
+        }
     }
 }

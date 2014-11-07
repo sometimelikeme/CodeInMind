@@ -13,8 +13,9 @@ public class CodeBean implements Serializable{
 	private String      		id;          //题目id
 	private String   			title;       //题目标题
 	private ArrayList<AnswerBean> 	answer_list; //题目答案集合
-	
-	
+
+    //Macrov
+	private ArrayList<AnswerBean> answerBeanList;
 	
 	public String getId() {
 		return id;
@@ -55,5 +56,9 @@ public class CodeBean implements Serializable{
 		return "CodeBean [id=" + id + ", title=" + title + ", answer_list="
 				+ answer_list + "]";
 	}
+
+    public ArrayList<AnswerBean> getAnswerBeanList(){
+        return answerBeanList;
+    }
 	
 }

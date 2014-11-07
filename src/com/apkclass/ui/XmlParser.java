@@ -3,6 +3,7 @@ package com.apkclass.ui;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -118,6 +119,9 @@ public class XmlParser {
                 if(eventType == XmlPullParser.START_DOCUMENT){
                     Log.d("codeParse","START_DOCUMENT");
                 }else if(eventType == XmlPullParser.START_TAG){
+                    if(xpp.getName() == "node"){
+                        answerBean = new AnswerBean();
+                    }
                     if(xpp.getName() == "subject") {
                         name = "subject";
                     }else if(xpp.getName() == "answer"){
@@ -126,20 +130,26 @@ public class XmlParser {
                 }else if(eventType == XmlPullParser.END_TAG){
                     if(xpp.getName() == "node"){
                         answerBeanList.add(answerBean);
-                        answerBean.clean();
+//                        Log.d("codeParse", answerBean.getSubject());
+//                        for(String answer:answerBean.getAnswerList()){
+//                            Log.d("codeParse", answer);
+//                        }
+                        answerBean = new AnswerBean();
                     }
                 }else if(eventType == XmlPullParser.TEXT) {
                     if(name == "subject"){
                         answerBean.setSubject(xpp.getText());
+//                        Log.d("codeParse", "setSubject : " + answerBean.getSubject());
                         name = null;
                     }else if(name == "answer"){
+//                        Log.d("codeParse", "addAnswer : " + xpp.getText());
                         answerBean.addAnswer(xpp.getText());
+//                        Log.d("codeParse", "addAnswer : " + xpp.getText());
                         name = null;
                     }
                 }
-                xpp.next();
+                eventType = xpp.next();
             }
-            answerBeanList.add(answerBean);
 
         }catch(XmlPullParserException xmlExc){
             xmlExc.printStackTrace();
