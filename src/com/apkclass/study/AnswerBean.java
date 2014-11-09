@@ -12,6 +12,7 @@ public class AnswerBean{
 
     private ArrayList<String> answerList;
     private String subject;
+    private int id;
 
 	
 	public Boolean getAnswer_flag() {
@@ -31,7 +32,7 @@ public class AnswerBean{
         this.answerList = new ArrayList<String>();
         this.subject = null;
     }
-	public void AnswerBean(String subject, ArrayList<String> answerList){
+public void AnswerBean(String subject, ArrayList<String> answerList){
         this.subject = subject;
         this.answerList = answerList;
     }
@@ -44,6 +45,14 @@ public class AnswerBean{
         return subject;
     }
 
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    public int getID() {
+        return this.id;
+    }
+
     public void setSubject(String subject){
         this.subject = subject;
     }
@@ -51,6 +60,7 @@ public class AnswerBean{
     public void addAnswer(String answer){
         this.answerList.add(answer);
     }
+
 
     public void clean(){
         this.subject = null;

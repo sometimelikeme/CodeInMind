@@ -108,7 +108,7 @@ public class XmlParser {
 	}
 
 
-    public void codeParse(Reader reader,ArrayList<AnswerBean> answerBeanList){
+    public static void codeParse(Reader reader,ArrayList<AnswerBean> answerBeanList){
         XmlPullParser xpp = Xml.newPullParser();
         try {
             xpp.setInput(reader);
@@ -121,6 +121,7 @@ public class XmlParser {
                 }else if(eventType == XmlPullParser.START_TAG){
                     if(xpp.getName() == "node"){
                         answerBean = new AnswerBean();
+                        answerBean.setID(Integer.valueOf(xpp.getAttributeValue(null, "id")));
                     }
                     if(xpp.getName() == "subject") {
                         name = "subject";

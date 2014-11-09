@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,20 +152,18 @@ public class CodeProvider {
         if(pageSkip > 0) {
             query.setSkip(pageCount * pageSkip);
         }
-
+        ArrayList<String> codeList = new ArrayList<String>();
         try{
-            ArrayList<String> codeList = new ArrayList<String>();
+
             List<AVObject> avObjectList = query.find();
-            for(int i; i<avObjectList.size(); i++){
+            for(int i=0; i<avObjectList.size(); i++){
                 codeList.add(avObjectList.get(i).getString("codeName"));
             }
-
-            return codeList;
-
         }catch (AVException e){
             e.printStackTrace();
         }
 
+        return codeList;
     }
 
     public void getCodeFromServerInBackground(final String codeName, final GetDataCallback getDataCallback){
@@ -186,14 +185,26 @@ public class CodeProvider {
     }
 
     public byte[] getCodeFromServer(String codeName){
+        byte[] code = null;
         AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
         query.whereEqualTo("codeName", codeName);
         try {
             AVObject avObject = query.getFirst();
             AVFile codeFile = avObject.getAVFile("codeFile");
-            return codeFile.getData();
+            code = codeFile.getData();
         }catch(AVException e){
             e.printStackTrace();
         }
+        return code;
+    }
+
+    public CodeBean getCodeBean(String codeName){
+        byte[] code = getCodeFromServer(codeName);
+        CodeBean cb = new CodeBean();
+        ArrayList<AnswerBean> answerBeanArrayList = new ArrayList<AnswerBean>();
+        XmlParser.codeParse(new StringReader(new String(code)), answerBeanArrayList);
+        cb.setAnswer_list(answerBeanArrayList);
+        cb.setTitle(codeName);
+        return cb;
     }
 }
