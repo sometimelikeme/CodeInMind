@@ -11,11 +11,15 @@ import android.content.Context;
 import android.text.NoCopySpan.Concrete;
 import android.view.LayoutInflater;
 import android.view.View; 
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CodeListAdapter extends BaseAdapter {
 	
@@ -71,6 +75,20 @@ public class CodeListAdapter extends BaseAdapter {
 		lvAnswers.setAnswer_list(codebeanlist.get(position).getAnswer_list());
 		lvAnswers.notifyDataSetChanged();
 		LvHeightUtil.setListViewHeightBasedOnChildren(lv_answers);
+		
+		lv_answers.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				log.e("on answerlist item click listener");
+				if(codebeanlist.get(position).getAnswer_list().get(position).getAnswer_flag().equals("Y")){
+					Toast.makeText(context, "答案正确", 1).show();
+				}
+				
+			}
+		});
 		
 		return view;
 	}
