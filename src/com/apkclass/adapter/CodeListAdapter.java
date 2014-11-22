@@ -1,7 +1,8 @@
 package com.apkclass.adapter;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 
+import com.apkclass.database.AnswerDBHelper;
 import com.apkclass.study.AnswerBean;
 import com.apkclass.study.CodeBean;
 import com.apkclass.ui.R;
@@ -25,10 +26,12 @@ public class CodeListAdapter extends BaseAdapter {
 	
 	private Context context;
 	private ArrayList<CodeBean> codebeanlist;
+	private AnswerDBHelper asdb;
 
-	public CodeListAdapter(Context context) {
+	public CodeListAdapter(Context context, AnswerDBHelper dbh) {
 		super();
 		this.context = context;
+		this.asdb = dbh;
 	}
 	
 	public ArrayList<CodeBean> getCodebeanlist() {
@@ -59,7 +62,7 @@ public class CodeListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		log.e("position:"+position);
 		LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -80,13 +83,29 @@ public class CodeListAdapter extends BaseAdapter {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+					int position1, long id) {
 				// TODO Auto-generated method stub
 				log.e("on answerlist item click listener");
-				if(codebeanlist.get(position).getAnswer_list().get(position).getAnswer_flag().equals("Y")){
+				log.e("jiangkun" +codebeanlist.get(position).getAnswer_list().get(position1).toString());
+				if(codebeanlist.get(position).getAnswer_list().get(position1).getAnswer_flag() == true){
+					//正确的题目放进数据库的right列表中
 					Toast.makeText(context, "答案正确", 1).show();
+					asdb.insert_id(codebeanlist.get(position).getId(), "right");
+				}else {
+					//错误题目id
+					asdb.insert_id(codebeanlist.get(position).getId(), "wrong");
 				}
 				
+				ArrayList<String> right = asdb.getidlist("right");
+				ArrayList<String> wrong = asdb.getidlist("wrong");
+				
+				for(int i=0; i<right.size(); i++) {
+					log.e("right:" + right.get(i));
+				}
+				
+				for(int i=0; i<wrong.size(); i++) {
+					log.e("wrong:"+ wrong.get(i));
+				}
 			}
 		});
 		

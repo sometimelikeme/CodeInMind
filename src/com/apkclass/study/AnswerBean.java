@@ -19,6 +19,12 @@ public class AnswerBean implements Serializable{
 	public void setAnswer_content(String answer_content) {
 		this.answer_content = answer_content;
 	}
+	@Override
+	public String toString() {
+		return "AnswerBean [answer_flag=" + answer_flag + ", answer_content="
+				+ answer_content + "]";
+	}
+	
 	
 	
 

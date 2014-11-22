@@ -4,6 +4,7 @@ package com.apkclass.study;
 import java.util.ArrayList;
 
 import com.apkclass.adapter.CodeListAdapter;
+import com.apkclass.database.AnswerDBHelper;
 import com.apkclass.ui.R;
 import com.apkclass.ui.StartLearn;
 import com.apkclass.utils.log;
@@ -18,11 +19,14 @@ public class LearnPage extends Activity {
 	
 	private ArrayList<CodeBean> codeBeanList = null;
 	private ListView lv_codelist;
+	private AnswerDBHelper asdb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.learnpage);
+		
+		asdb = new AnswerDBHelper(this);
 		
 		lv_codelist = (ListView) findViewById(R.id.lv_codelist);
 		
@@ -35,7 +39,7 @@ public class LearnPage extends Activity {
 		
 		codeBeanList = codeProvider.getCodeListFromFile(num);
 		
-		CodeListAdapter codeListAdapter = new CodeListAdapter(LearnPage.this);
+		CodeListAdapter codeListAdapter = new CodeListAdapter(LearnPage.this, asdb);
 		lv_codelist.setAdapter(codeListAdapter);
 		codeListAdapter.setCodebeanlist(codeBeanList);
 		codeListAdapter.notifyDataSetChanged();
