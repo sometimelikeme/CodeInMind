@@ -101,6 +101,7 @@ public class CodeDBHelper extends SQLiteOpenHelper {
             cv.put("lastUpdateDate", date.getTime());
             db.insert(TABLE_NAME, null, cv);
         }
+        db.close();
     }
 
     public void update(ContentValues cv, String whereCluse, String[] whereArgs){
@@ -110,6 +111,7 @@ public class CodeDBHelper extends SQLiteOpenHelper {
         cv.put("lastUpdateDate", date.getTime());
 
         db.update(TABLE_NAME, cv, whereCluse, whereArgs);
+        db.close();
     }
 
 
@@ -138,11 +140,12 @@ public class CodeDBHelper extends SQLiteOpenHelper {
                 result.add(cursor.getString(cursor.getColumnIndex("answerID")));
             }
         }
+        db.close();
         return result;
     }
 
     public String getOneByMemLevel(int memLevel){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
 
         String whereCluse = "memLevel=?";
         String[] whereArgs = new String[]{String.valueOf(memLevel)};
@@ -150,8 +153,11 @@ public class CodeDBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME, null, whereCluse, whereArgs,null,null,null,null);
 
         if(cursor.moveToFirst()) {
-            return cursor.getString(cursor.getColumnIndex("answerID"));
+            String answerID = cursor.getString(cursor.getColumnIndex("answerID"));
+            db.close();
+            return answerID;
         }
+        db.close();
         return null;
     }
 
@@ -165,8 +171,10 @@ public class CodeDBHelper extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             String memLevel = cursor.getString(cursor.getColumnIndex("memLevel"));
+            db.close();
             return Integer.parseInt(memLevel);
         }
+        db.close();
         return 100;
     }
 
