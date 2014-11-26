@@ -1,33 +1,34 @@
 package com.apkclass.code;
 
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.AVUser;
+import android.content.Context;
+
+import com.apkclass.database.CodeDBHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by 28852028 on 11/21/2014.
  */
 public class CodeNode {
 
+    private Context context;
+    private CodeDBHelper codeDBHelper;
+
     private String codeName;
-    private AVUser codeUser;
 
     private ArrayList<AnswerNode> answerNodeArrayList;
-    private HashMap<String, ArrayList<AnswerNode>> memLevelMapper;
+    private HashMap<String, AnswerNode> answerNodeHashMap;
 
-    public CodeNode(String name, AVUser user){
+    public CodeNode(String name){
         codeName = name;
-        codeUser = user;
-        answerNodeArrayList = new ArrayList<AnswerNode>();
-        memLevelMapper = new HashMap<String, ArrayList<AnswerNode>>();
-        initMemLevelMapper();
-        initAnswerNodeList();
-        parseAnswerNodeList();
+        answerNodeHashMap = new HashMap<String, AnswerNode>();
+    }
+
+    public CodeNode(Context context, String name){
+        this.context = context;
+        codeName = name;
+        answerNodeHashMap = new HashMap<String, AnswerNode>();
     }
 
     public ArrayList<AnswerNode> getAnswerNodeArrayList(){
@@ -38,39 +39,66 @@ public class CodeNode {
         answerNodeArrayList = answerNodes;
     }
 
-    private void initAnswerNodeList(){
-        List<AVObject> answerNodes = null;
-        AVQuery<AVObject> query = new AVQuery<AVObject>("UserAnswerRecorder");
-        query.whereEqualTo("codeUser", codeUser);
-        query.whereEqualTo("codeName", codeName);
-        try {
-            answerNodes = query.find();
-        }catch(AVException e){
-            e.printStackTrace();
-        }
-
-        if(answerNodes.size() > 0){
-            for(AVObject node:answerNodes){
-                AnswerNode answerNode = (AnswerNode) node;
-                answerNodeArrayList.add(new AnswerNode( answerNode.getCodeName(),
-                                                            answerNode.getAnswerId(),
-                                                            answerNode.getAnswerUser(),
-                                                            answerNode.getMemLevel()));
-            }
-        }
+    public void setAnswerNodeHashMap(HashMap<String, AnswerNode> answerNodeHashMap){
+        this.answerNodeHashMap = answerNodeHashMap;
     }
 
-    private void initMemLevelMapper(){
-        for(int i=AnswerNode.MEM_LEVEL_MIN; i< AnswerNode.MEM_LEVEL_MAX; i++){
-            memLevelMapper.put(String.valueOf(i), new ArrayList<AnswerNode>());
-        }
+    public HashMap<String, AnswerNode> getAnswerNodeHashMap(){
+        return this.answerNodeHashMap;
     }
 
-    private void parseAnswerNodeList(){
-        if(answerNodeArrayList.size() > 0) {
-            for (AnswerNode answerNode : answerNodeArrayList) {
-                memLevelMapper.get(String.valueOf(answerNode.getMemLevel())).add(answerNode);
-            }
+    public AnswerNode getOneAnswerNode(){
+        codeDBHelper = new CodeDBHelper(context);
+        String answerID = null;
+        if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_MIN)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_0)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_1)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_2)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_3)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_4)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_5)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_6)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_7)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_8)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_9)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_10)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_11)) != null){
+            return answerNodeHashMap.get(answerID);
+        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_12)) != null){
+            return answerNodeHashMap.get(answerID);
         }
+        return null;
     }
+
+    public void saveOneAnswerNode(AnswerNode answerNode, boolean result){
+        codeDBHelper = new CodeDBHelper(context);
+        if(result){
+            codeDBHelper.incMemLevel(answerNode.getAnswerID());
+        }else{
+            codeDBHelper.decMemLevel(answerNode.getAnswerID());
+        }
+        codeDBHelper.close();
+
+    }
+
+    public int getOneAnswerMemLevel(AnswerNode answerNode){
+        codeDBHelper = new CodeDBHelper(context);
+        int memLevel = codeDBHelper.getMemLevel(answerNode.getAnswerID());
+        codeDBHelper.close();
+        return  memLevel;
+    }
+
+
 }
