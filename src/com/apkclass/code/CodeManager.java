@@ -1,8 +1,10 @@
 package com.apkclass.code;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.util.Log;
-import android.util.Xml;
 
+import com.apkclass.database.CodeDBHelper;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
@@ -12,13 +14,13 @@ import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.GetDataCallback;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,14 +28,96 @@ import java.util.List;
  */
 public class CodeManager {
 
+    private Context context;
+
     private String codeName;
     private AVUser codeUser;
+    private CodeNode codeNode;
 
-    public CodeManager(String name, AVUser user){
-        codeName = name;
-        codeUser = user;
+    public CodeManager(Context context, String codeName){
+        this.context = context;
+        this.codeName = codeName;
+
+        initialize();
     }
 
+    private void initialize(){
+        if(codeFileIsExist()){ //codeFile exist in local storage
+            String code = readCodeFile();
+            codeNode = new CodeNode(context, codeName);
+            CodeXMLParser.codeParse(new StringReader(code), codeNode.getAnswerNodeHashMap());
+            initializeDB();
+
+        }else{ //get codeFile from server
+            byte[] codeBytes = getCodeFromServer(codeName);
+            saveFileLocally(codeBytes);
+            String code = new String(codeBytes);
+            codeNode = new CodeNode(context, codeName);
+            CodeXMLParser.codeParse(new StringReader(code), codeNode.getAnswerNodeHashMap());
+            initializeDB();
+        }
+    }
+
+    private boolean codeFileIsExist(){
+        String fileName = codeName + ".xml";
+        String path = "/data/data/" + context.getPackageName() + "/files";
+        File codeFile = new File(path, fileName);
+        if(codeFile.exists()) {
+            return true;
+        }
+        return false;
+    }
+
+    private String readCodeFile(){
+        String fileName = codeName + ".xml";
+
+        try {
+            FileInputStream inputStream = context.openFileInput(fileName);
+            byte[] buffer = new byte[1024];
+            int hasRead = 0;
+            StringBuilder code = new StringBuilder("");
+            while((hasRead = inputStream.read(buffer)) > 0){
+                code.append(new String(buffer, 0, hasRead));
+            }
+            inputStream.close();
+            return code.toString();
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void saveFileLocally(byte[] bytes){
+        String fileName = codeName + ".xml";
+
+        try{
+            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_APPEND);
+            outputStream.write(bytes);
+            outputStream.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeDB(){
+        CodeDBHelper codeDBHelper = new CodeDBHelper(context);
+        Iterator iter = codeNode.getAnswerNodeHashMap().keySet().iterator();
+        while(iter.hasNext()){
+            String key = (String)iter.next();
+            AnswerNode answerNode = codeNode.getAnswerNodeHashMap().get(key);
+            ContentValues cv = new ContentValues();
+            cv.put("codeName", codeName);
+            cv.put("answerID", String.valueOf(answerNode.getAnswerID()));
+            cv.put("memLevel", String.valueOf(AnswerRecorder.MEM_LEVEL_INIT));
+            codeDBHelper.insert(cv);
+        }
+        codeDBHelper.close();
+    }
+
+    public CodeNode getCodeNode(){
+        return this.codeNode;
+    }
     public void getCodeListFromServerInBackgroud(int pageCount, int pageSkip, final FindCallback findCallback){
         AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
 
@@ -100,56 +184,5 @@ public class CodeManager {
             e.printStackTrace();
         }
         return code;
-    }
-
-    public CodeNode getCodeNode(String name, AVUser user){
-        byte[] code = getCodeFromServer(codeName);
-        CodeNode cn = new CodeNode(name, user);
-        codeParse(new StringReader(new String(code)), cn.getAnswerNodeArrayList());
-        return cn;
-    }
-
-    private void codeParse(Reader reader,ArrayList<AnswerNode> answerBeanList){
-        XmlPullParser xpp = Xml.newPullParser();
-        try {
-            xpp.setInput(reader);
-            int eventType = xpp.getEventType();
-            String name = null;
-            AnswerNode answerNode = new AnswerNode(codeName, codeUser);
-            while(eventType != XmlPullParser.END_DOCUMENT){
-                if(eventType == XmlPullParser.START_DOCUMENT){
-
-                }else if(eventType == XmlPullParser.START_TAG){
-                    if(xpp.getName() == "node"){
-                        answerNode = new AnswerNode(codeName, codeUser);
-                        answerNode.setAnswerId(Integer.valueOf(xpp.getAttributeValue(null, "id")));
-                    }
-                    if(xpp.getName() == "subject") {
-                        name = "subject";
-                    }else if(xpp.getName() == "answer"){
-                        name = "answer";
-                    }
-                }else if(eventType == XmlPullParser.END_TAG){
-                    if(xpp.getName() == "node"){
-                        answerBeanList.add(answerNode);
-                        answerNode = new AnswerNode(codeName, codeUser);
-                    }
-                }else if(eventType == XmlPullParser.TEXT) {
-                    if(name == "subject"){
-                        answerNode.setSubject(xpp.getText());
-                        name = null;
-                    }else if(name == "answer"){
-                        answerNode.addAnswer(xpp.getText());
-                        name = null;
-                    }
-                }
-                eventType = xpp.next();
-            }
-
-        }catch(XmlPullParserException xmlExc){
-            xmlExc.printStackTrace();
-        }catch(IOException ioExc){
-            ioExc.printStackTrace();
-        }
     }
 }
