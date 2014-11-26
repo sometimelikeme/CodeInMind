@@ -34,11 +34,8 @@ public class CodeManager {
     private AVUser codeUser;
     private CodeNode codeNode;
 
-    public CodeManager(Context context, String codeName){
+    public CodeManager(Context context){
         this.context = context;
-        this.codeName = codeName;
-
-        initialize();
     }
 
     private void initialize(){
@@ -115,7 +112,10 @@ public class CodeManager {
         codeDBHelper.close();
     }
 
-    public CodeNode getCodeNode(){
+
+    public CodeNode getCodeNode(String codeName){
+        this.codeName = codeName;
+        initialize();
         return this.codeNode;
     }
     public void getCodeListFromServerInBackgroud(int pageCount, int pageSkip, final FindCallback findCallback){
