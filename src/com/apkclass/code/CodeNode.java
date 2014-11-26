@@ -93,6 +93,19 @@ public class CodeNode {
 
     }
 
+    public boolean saveOneAnswerNode(AnswerNode answerNode, String result){
+        codeDBHelper = new CodeDBHelper(context);
+        if(answerNode.getCorrectAnswer().equals(result)){
+            codeDBHelper.incMemLevel(answerNode.getAnswerID());
+            return true;
+        }else{
+            codeDBHelper.decMemLevel(answerNode.getAnswerID());
+        }
+        codeDBHelper.close();
+        return false;
+
+    }
+
     public int getOneAnswerMemLevel(AnswerNode answerNode){
         codeDBHelper = new CodeDBHelper(context);
         int memLevel = codeDBHelper.getMemLevel(answerNode.getAnswerID());
