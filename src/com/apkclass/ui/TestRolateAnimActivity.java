@@ -1,25 +1,20 @@
 package com.apkclass.ui;
 
-import com.apkclass.ui.MyImageView.OnViewClickListener;
-import com.apkclass.ui.R;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.GetCallback;
-import com.avos.avoscloud.GetDataCallback;
-import com.avos.avoscloud.SaveCallback;
-import com.avos.avoscloud.LogUtil.log;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.apkclass.code.AnswerNode;
+import com.apkclass.code.CodeManager;
+import com.apkclass.code.CodeNode;
+import com.apkclass.database.CodeDBHelper;
+import com.apkclass.ui.MyImageView.OnViewClickListener;
+
+import java.util.ArrayList;
 
 public class TestRolateAnimActivity extends Activity {
 	MyImageView joke;
@@ -81,57 +76,36 @@ public class TestRolateAnimActivity extends Activity {
 		avos.setOnClickIntent(new OnViewClickListener() {
 			@Override
 			public void onViewClick(MyImageView view) {
-				AVQuery<AVObject> query = new AVQuery<AVObject>("apk");
-				AVObject avObject;
-				try {
-					avObject = query.get("54485927e4b0327b4b9b84b3");
-					if(avObject == null) {
-						log.e("avobject == null");
-					}
-					AVFile avFile = avObject.getAVFile("myfile");
-					if (avFile == null) {
-						log.e("avfile==null");
-						return;
-					}
-					avFile.getDataInBackground(new GetDataCallback() {
-						public void done(byte[] data, AVException e) {
-							// process data or exception.
-							log.e("data:" + data.length);
-							//log.e("data:" + new String(data));
-						}
-					});
-				} catch (AVException e1) {
-					e1.printStackTrace();
-				}
+
+//                CodeManager cm = new CodeManager(TestRolateAnimActivity.this);//当前context初始化
+//                ArrayList<String> codeList = cm.getCodeListFromServer(10,0);//10获取数量，0是skip值， 10,0表示取前十个， 10，2表示取第21-30个
+//                for(String code:codeList){
+//                    Log.d("test","codeName :" + code);
+//                }
+//                CodeNode codeNode = cm.getCodeNode("android-base");//题库名字是android-base
+//                AnswerNode answerNode = codeNode.getOneAnswerNode();//拿到一个记忆等级最低的题
+//                Log.d("test", answerNode.getSubject());//题的subject
+//                for(String answer:answerNode.getRandomAnswerArrayList()){//各个答案，顺序已经打乱
+//                    Log.d("test","answer :" + answer);
+//                }
+//                String answerSelected = answerNode.getAnswerArrayList().get(0);//用户选择的答案
+//                codeNode.saveOneAnswerNode(answerNode,answerSelected);//判断并保存结果
+//                Log.d("test", String.valueOf(codeNode.getOneAnswerMemLevel(answerNode)));
+                Intent intent = new Intent();
+                intent.setClass(TestRolateAnimActivity.this, LearnPage.class);
+                TestRolateAnimActivity.this.startActivity(intent);
+
+
 			}
 		});
-		
-	      AVQuery<AVObject> query2 = new AVQuery<AVObject>("CodeRepository");
-          query2.getFirstInBackground(new GetCallback<AVObject>() {
-              @Override
-              public void done(AVObject avObject, AVException e) {
-                  if( e == null ){
-                      if(avObject == null){
-                          Log.e("Test","avObject is null");
-                      } else {
-                          Log.e("Test","avObject is not null");
-                      }
-                      Log.e("Test",avObject.getObjectId());
-                      String name = avObject.getString("name");
-                      Log.e("Test",name);
-                      AVFile xmlFile = avObject.getAVFile("code");
-                      xmlFile.getDataInBackground(new GetDataCallback() {
-                          @Override
-                          public void done(byte[] bytes, AVException e) {
-                              if(e == null){
-                                  Log.e("Test", "Got Data");
-                              }
-                          }
-                      });
-                  }
-              }
-          });
+
 
 	}
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CodeDBHelper codeDBHelper = new CodeDBHelper(TestRolateAnimActivity.this);
+        codeDBHelper.close();
+    }
 }

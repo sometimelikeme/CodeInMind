@@ -210,6 +210,10 @@ public class CodeDBHelper extends SQLiteOpenHelper {
         updateMemLevel(codeName, answerID, memLevel);
     }
 
+    public void topMemLevel(String codeName, int answerID, int memLevel){
+        updateMemLevel(codeName, answerID, memLevel);
+    }
+
     private void updateMemLevel(int answerID, int memLevel){
         ContentValues cv = new ContentValues();
         cv.put("memLevel", String.valueOf(memLevel));

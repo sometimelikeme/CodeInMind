@@ -112,6 +112,21 @@ public class CodeManager {
         codeDBHelper.close();
     }
 
+    public void resetDB(){
+        CodeDBHelper codeDBHelper = new CodeDBHelper(context);
+        Iterator iter = codeNode.getAnswerNodeHashMap().keySet().iterator();
+        while(iter.hasNext()){
+            String key = (String)iter.next();
+            AnswerNode answerNode = codeNode.getAnswerNodeHashMap().get(key);
+            String whereCluse = "codeName=? AND answerID=?";
+            String[] whereArgs = new String[]{codeName,String.valueOf(answerNode.getAnswerID())};
+            ContentValues cv = new ContentValues();
+            cv.put("memLevel", String.valueOf(AnswerRecorder.MEM_LEVEL_INIT));
+            codeDBHelper.update(cv, whereCluse, whereArgs);
+        }
+        codeDBHelper.close();
+    }
+
 
     public CodeNode getCodeNode(String codeName){
         this.codeName = codeName;
