@@ -77,7 +77,9 @@ public class CodeNode {
         }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_11)) != null){
             return answerNodeHashMap.get(answerID);
         }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_12)) != null){
-            return answerNodeHashMap.get(answerID);
+            AnswerNode doneNode = new AnswerNode();
+            doneNode.setAnswerID(2048);//yeah, we love 2048
+            return doneNode;
         }
         return null;
     }
@@ -91,6 +93,12 @@ public class CodeNode {
         }
         codeDBHelper.close();
 
+    }
+
+    public void saveOneAnswerNodeAsRemembered(AnswerNode answerNode){
+        codeDBHelper = new CodeDBHelper(context);
+        codeDBHelper.topMemLevel(codeName, answerNode.getAnswerID(), AnswerRecorder.MEM_LEVEL_MAX);
+        codeDBHelper.close();
     }
 
     public boolean saveOneAnswerNode(AnswerNode answerNode, String result){
