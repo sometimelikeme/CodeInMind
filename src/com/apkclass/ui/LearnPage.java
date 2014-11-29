@@ -3,8 +3,9 @@ package com.apkclass.ui;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.DialogPreference;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,8 +42,11 @@ public class LearnPage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.learnpagenew);
+
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        String codeSelected = bundle.getString("codeName");
 
         subject = (TextView)findViewById(R.id.subject);
         answerList = (ListView)findViewById(R.id.answer_list);
@@ -57,9 +61,10 @@ public class LearnPage extends Activity {
         buttonReset = (Button)findViewById(R.id.button_reset);
 
         codeManager = new CodeManager(this);
-        codeNode = codeManager.getCodeNode("android-base");
-        codeName.setText("android-base");
-        answerNode = codeNode.getOneAnswerNode();
+        Log.e("test", codeSelected);
+        codeNode = codeManager.getCodeNode(codeSelected);
+        codeName.setText(codeSelected);
+
 
 
         buttonEasy.setVisibility(View.INVISIBLE);
@@ -99,6 +104,8 @@ public class LearnPage extends Activity {
                 showAnswerNode(answerNode);
             }
         });
+
+        answerNode = codeNode.getOneAnswerNode();
         if(answerNode.getAnswerID() == 2048){ // yeah, we true love 2048
             showDone();
         }else{
@@ -143,7 +150,7 @@ public class LearnPage extends Activity {
                     showDone();
                 }else{
                     buttonReset.setVisibility(View.GONE);
-                    answerLayout.setVisibility(View.VISIBLE);
+                    answerLayout.setVisibility(View.VISIBLE );
                     showAnswerNode(answerNode);
                 }
             }

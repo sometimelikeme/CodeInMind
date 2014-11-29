@@ -36,6 +36,10 @@
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
         </activity>
         <activity
+            android:name="com.apkclass.ui.CodeSelectPage"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
             android:name="com.apkclass.ui.LearnPage"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
         </activity>

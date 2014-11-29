@@ -92,7 +92,7 @@ public class TestRolateAnimActivity extends Activity {
 //                codeNode.saveOneAnswerNode(answerNode,answerSelected);//判断并保存结果
 //                Log.d("test", String.valueOf(codeNode.getOneAnswerMemLevel(answerNode)));
                 Intent intent = new Intent();
-                intent.setClass(TestRolateAnimActivity.this, LearnPage.class);
+                intent.setClass(TestRolateAnimActivity.this, CodeSelectPage.class);
                 TestRolateAnimActivity.this.startActivity(intent);
 
 
