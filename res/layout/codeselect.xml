@@ -9,7 +9,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="选择题库"
         android:id="@+id/codeSelect"
-        android:layout_gravity="center" />
+        android:gravity="center"/>
 
     <ListView
         android:layout_width="match_parent"

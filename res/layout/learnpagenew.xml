@@ -78,14 +78,15 @@
             <LinearLayout
                 android:id="@+id/ll_buttons"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:gravity="center"
                 android:layout_alignParentBottom="true" >
 
-                <Button
+                <TextView
                     android:id="@+id/button_easy"
-                    style="?android:attr/buttonStyleSmall"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -93,9 +94,9 @@
                     android:layout_toLeftOf="@+id/button_ops"
                     android:text="太简单了！" />
 
-                <Button
+                <TextView
                     android:id="@+id/button_ops"
-                    style="?android:attr/buttonStyleSmall"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -103,9 +104,9 @@
                     android:layout_centerHorizontal="true"
                     android:text="点错了..." />
 
-                <Button
+                <TextView
                     android:id="@+id/button_next"
-                    style="?android:attr/buttonStyleSmall"
+                    android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

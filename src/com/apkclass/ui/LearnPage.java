@@ -34,9 +34,9 @@ public class LearnPage extends Activity {
     TextView answer;
     TextView result;
 
-    Button buttonEasy;
-    Button buttonOps;
-    Button buttonNext;
+    TextView buttonEasy;
+    TextView buttonOps;
+    TextView buttonNext;
     Button buttonReset;
 
     @Override
@@ -55,13 +55,12 @@ public class LearnPage extends Activity {
         answerLayout = (RelativeLayout)findViewById(R.id.answerListLayout);
         result = (TextView)findViewById(R.id.result);
 
-        buttonEasy = (Button)findViewById(R.id.button_easy);
-        buttonOps = (Button)findViewById(R.id.button_ops);
-        buttonNext = (Button)findViewById(R.id.button_next);
+        buttonEasy = (TextView)findViewById(R.id.button_easy);
+        buttonOps = (TextView)findViewById(R.id.button_ops);
+        buttonNext = (TextView)findViewById(R.id.button_next);
         buttonReset = (Button)findViewById(R.id.button_reset);
 
         codeManager = new CodeManager(this);
-        Log.e("test", codeSelected);
         codeNode = codeManager.getCodeNode(codeSelected);
         codeName.setText(codeSelected);
 

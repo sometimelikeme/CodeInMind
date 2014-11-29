@@ -1,6 +1,7 @@
 package com.apkclass.code;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.apkclass.database.CodeDBHelper;
 
@@ -50,37 +51,52 @@ public class CodeNode {
     public AnswerNode getOneAnswerNode(){
         codeDBHelper = new CodeDBHelper(context);
         String answerID = null;
-        if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_MIN)) != null){
+        if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_MIN)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_0)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_0)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_1)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_1)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_2)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_2)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_3)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_3)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_4)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_4)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_5)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_5)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_6)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_6)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_7)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_7)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_8)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_8)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_9)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_9)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_10)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_10)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_11)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_11)) != null){
+            Log.d("getOneAnswerNode", "get answer, ID is :" + answerID);
             return answerNodeHashMap.get(answerID);
-        }else if((answerID = codeDBHelper.getOneByMemLevel(AnswerRecorder.MEM_LEVEL_12)) != null){
+        }else if((answerID = codeDBHelper.getOneByMemLevel(codeName, AnswerRecorder.MEM_LEVEL_12)) != null){
+            Log.d("getOneAnswerNode", "all answer done");
             AnswerNode doneNode = new AnswerNode();
             doneNode.setAnswerID(2048);//yeah, we love 2048
             return doneNode;
         }
+        Log.d("getOneAnswerNode", "no answer get");
         return null;
     }
 

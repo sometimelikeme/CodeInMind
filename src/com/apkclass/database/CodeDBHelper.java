@@ -144,11 +144,11 @@ public class CodeDBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public String getOneByMemLevel(int memLevel){
+    public String getOneByMemLevel(String codeName, int memLevel){
         SQLiteDatabase db = getReadableDatabase();
 
-        String whereCluse = "memLevel=?";
-        String[] whereArgs = new String[]{String.valueOf(memLevel)};
+        String whereCluse = "codeName=? AND memLevel=?";
+        String[] whereArgs = new String[]{codeName, String.valueOf(memLevel)};
 
         Cursor cursor = db.query(TABLE_NAME, null, whereCluse, whereArgs,null,null,null,null);
 
