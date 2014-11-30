@@ -2,6 +2,9 @@ package com.apkclass.code;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.apkclass.database.CodeDBHelper;
@@ -167,6 +170,32 @@ public class CodeManager {
         }
 
         return codeList;
+    }
+
+    public ArrayList<CodeNode> getCodeNodeListFromServer(int pageCount,int pageSkip){
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+
+        if(pageCount > 0) {
+            query.setLimit(pageCount);
+        }
+        if(pageSkip > 0) {
+            query.setSkip(pageCount * pageSkip);
+        }
+        ArrayList<CodeNode> codeNodeArrayList = new ArrayList<CodeNode>();
+        try{
+
+            List<AVObject> avObjectList = query.find();
+            for(int i=0; i<avObjectList.size(); i++){
+                CodeNode codeNode = new CodeNode(context, avObjectList.get(i).getString("codeName"));
+                byte[] bitmapData = avObjectList.get(i).getAVFile("icon").getData();
+                codeNode.setIcon(BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.length));
+                codeNodeArrayList.add(codeNode);
+            }
+        }catch (AVException e){
+            e.printStackTrace();
+        }
+
+        return codeNodeArrayList;
     }
 
     public void getCodeFromServerInBackground(final String codeName, final GetDataCallback getDataCallback){

@@ -1,6 +1,8 @@
 package com.apkclass.code;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.apkclass.database.CodeDBHelper;
@@ -17,6 +19,8 @@ public class CodeNode {
     private CodeDBHelper codeDBHelper;
 
     private String codeName;
+    private Bitmap iconBitmap;
+    private String description;
 
     private ArrayList<AnswerNode> answerNodeArrayList;
     private HashMap<String, AnswerNode> answerNodeHashMap;
@@ -48,6 +52,17 @@ public class CodeNode {
         return this.answerNodeHashMap;
     }
 
+    public String getCodeName(){
+        return this.codeName;
+    }
+
+    public void setIcon(Bitmap icon){
+        this.iconBitmap = icon;
+    }
+
+    public Bitmap getIcon(){
+        return this.iconBitmap;
+    }
     public AnswerNode getOneAnswerNode(){
         codeDBHelper = new CodeDBHelper(context);
         String answerID = null;
