@@ -2,11 +2,22 @@ package com.apkclass.code;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.apkclass.database.CodeDBHelper;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,12 +39,25 @@ public class CodeNode {
     public CodeNode(String name){
         codeName = name;
         answerNodeHashMap = new HashMap<String, AnswerNode>();
+
+        if(ifIconExistLocally()){
+            this.iconBitmap = getIconBitmapFromLocal();
+        }else{
+            this.iconBitmap = getIconBitmapFromServer();
+            saveIconLocally(this.iconBitmap);
+        }
     }
 
     public CodeNode(Context context, String name){
         this.context = context;
         codeName = name;
         answerNodeHashMap = new HashMap<String, AnswerNode>();
+        if(ifIconExistLocally()){
+            this.iconBitmap = getIconBitmapFromLocal();
+        }else{
+            this.iconBitmap = getIconBitmapFromServer();
+            saveIconLocally(this.iconBitmap);
+        }
     }
 
     public ArrayList<AnswerNode> getAnswerNodeArrayList(){
@@ -58,9 +82,11 @@ public class CodeNode {
 
     public void setIcon(Bitmap icon){
         this.iconBitmap = icon;
+        saveIconLocally(icon);
     }
 
     public Bitmap getIcon(){
+
         return this.iconBitmap;
     }
     public AnswerNode getOneAnswerNode(){
@@ -145,11 +171,64 @@ public class CodeNode {
 
     }
 
+    private Bitmap getIconBitmapFromServer(){
+        AVObject codeObject;
+        AVQuery<AVObject> query = new AVQuery<AVObject>("Codes");
+        query.whereEqualTo("codeName", codeName);
+        try {
+            codeObject = query.getFirst();
+            byte[] iconBytes = codeObject.getAVFile("icon").getData();
+            iconBitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+            return iconBitmap;
+        }catch(AVException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public int getOneAnswerMemLevel(AnswerNode answerNode){
         codeDBHelper = new CodeDBHelper(context);
         int memLevel = codeDBHelper.getMemLevel(answerNode.getAnswerID());
         codeDBHelper.close();
         return  memLevel;
+    }
+
+    private void saveIconLocally(Bitmap icon){
+        String fileName = codeName + ".png";
+
+        try{
+            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_APPEND);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            icon.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            outputStream.write(byteArrayOutputStream.toByteArray());
+            outputStream.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap getIconBitmapFromLocal(){
+        String fileName = codeName + ".png";
+        try{
+            FileInputStream fileInputStream = context.openFileInput(fileName);
+            byte[] buffer = new byte[fileInputStream.available()];
+            fileInputStream.read(buffer);
+            return BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private boolean ifIconExistLocally(){
+        String fileName = codeName + ".png";
+        String path = "/data/data/" + context.getPackageName() + "/files";
+        File iconFile = new File(path, fileName);
+        if(iconFile.exists()) {
+            return true;
+        }
+        return false;
     }
 
 

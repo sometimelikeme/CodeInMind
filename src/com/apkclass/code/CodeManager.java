@@ -187,8 +187,8 @@ public class CodeManager {
             List<AVObject> avObjectList = query.find();
             for(int i=0; i<avObjectList.size(); i++){
                 CodeNode codeNode = new CodeNode(context, avObjectList.get(i).getString("codeName"));
-                byte[] bitmapData = avObjectList.get(i).getAVFile("icon").getData();
-                codeNode.setIcon(BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.length));
+//                byte[] bitmapData = avObjectList.get(i).getAVFile("icon").getData();
+//                codeNode.setIcon(BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.length));
                 codeNodeArrayList.add(codeNode);
             }
         }catch (AVException e){

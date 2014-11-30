@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +30,7 @@ public class LearnPage extends Activity {
     AnswerNode answerNode;
 
     RelativeLayout answerLayout;
+    ImageView codeIcon;
     TextView codeName;
     TextView subject;
     ListView answerList;
@@ -48,6 +51,7 @@ public class LearnPage extends Activity {
         Bundle bundle = intent.getExtras();
         String codeSelected = bundle.getString("codeName");
 
+        codeIcon = (ImageView)findViewById(R.id.codeIcon);
         subject = (TextView)findViewById(R.id.subject);
         answerList = (ListView)findViewById(R.id.answer_list);
         codeName = (TextView)findViewById(R.id.code_name);
@@ -63,6 +67,7 @@ public class LearnPage extends Activity {
         codeManager = new CodeManager(this);
         codeNode = codeManager.getCodeNode(codeSelected);
         codeName.setText(codeSelected);
+        codeIcon.setImageDrawable(new BitmapDrawable(getResources(),codeNode.getIcon()));
 
 
 
