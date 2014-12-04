@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class TestRolateAnimActivity extends Activity {
 	MyImageView joke;
 	MyImageView idea;
+	MyImageView c_constellation;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,18 @@ public class TestRolateAnimActivity extends Activity {
 						"记代码，找工作，赚钱，生娃，学IT，记代码。。。", 1000).show();
 				Intent intent = new Intent();
 				intent.setClass(TestRolateAnimActivity.this, FirstPage.class);
+				TestRolateAnimActivity.this.startActivity(intent);
+			}
+		});
+		
+		c_constellation = (MyImageView) findViewById(R.id.c_constellation);
+		c_constellation.setOnClickIntent(new OnViewClickListener() {
+			
+			@Override
+			public void onViewClick(MyImageView view) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(TestRolateAnimActivity.this, RegisterAndLogin.class);
 				TestRolateAnimActivity.this.startActivity(intent);
 			}
 		});
