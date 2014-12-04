@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkslategrey"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_firstline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#082E54"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="注册"
+        android:textColor="@color/black"
+        android:textSize="50sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_input_phone_number"
+        android:layout_below="@+id/tv_firstline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            android:text="请输入手机号" />
+
+        <EditText
+            android:id="@+id/et_phone_number"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your Phone Number"
+            android:background="@drawable/textfield_activated_holo_dark"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/black" />
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:layout_below="@+id/ll_input_phone_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="30dp"
+        >
+        <Button
+            android:id="@+id/bt_register"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="一键注册"
+            
+            />
+        
+        
+        
+    </LinearLayout>
+
+</RelativeLayout>
